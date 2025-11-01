@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using UkrNetSeleniumParserP33.Models;
+using UkrNetSeleniumParserP33.Parser;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.InputEncoding = System.Text.Encoding.UTF8;
@@ -15,7 +16,7 @@ using IWebDriver driver = new ChromeDriver();
 
 try
 {
-    var parser = new UkrNetSeleniumParserP33.Parser.SiteParser(driver);
+    var parser = new UkrNetSeleniumParserP33.Parser.SiteParser(driver, new JsonFileDataSaver());
     parser.Run();
 }
 catch (Exception ex)

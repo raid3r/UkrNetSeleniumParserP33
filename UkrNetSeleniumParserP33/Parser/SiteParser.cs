@@ -10,7 +10,7 @@ using UkrNetSeleniumParserP33.Models;
 
 namespace UkrNetSeleniumParserP33.Parser;
 
-public class SiteParser(IWebDriver driver)
+public class SiteParser(IWebDriver driver, IDataSaver dataSaver)
 {
     
     public void Run()
@@ -64,6 +64,8 @@ public class SiteParser(IWebDriver driver)
         }
 
         Console.WriteLine("Count: " + parsedNewsItems.Count);
+
+        dataSaver.SaveNewsItems(parsedNewsItems);
 
         Console.WriteLine("Press any key to exit...");
 
