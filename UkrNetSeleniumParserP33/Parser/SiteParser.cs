@@ -25,10 +25,10 @@ public class SiteParser(IWebDriver driver, IDataSaver dataSaver)
 
         // Scroll to the bottom of the page to load all news items (if lazy loading is implemented)
         // Smuth scrolling
-        // 5 times scroll
-        for (int i = 0; i < 10; i++)
+        var scrollCount = 1;
+        for (int i = 0; i < scrollCount; i++)
         {
-            Console.WriteLine($"Scrolling {i + 1}/10");
+            Console.WriteLine($"Scrolling {i + 1}/{scrollCount}");
             ((IJavaScriptExecutor)driver).ExecuteScript("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });");
             Thread.Sleep(2000); // Задержка 2 секунды, чтобы подождать завершения анимации и подгрузки контента
         }
@@ -36,7 +36,7 @@ public class SiteParser(IWebDriver driver, IDataSaver dataSaver)
         // парсимо новини розділу
         var sectionNewsPageContent = driver.PageSource;
         var sectionUrlPart = section.Url.Split('/').Last().Replace(".html", "").Replace(" ", "_").ToLower();
-        File.WriteAllText($"ukrnet_${sectionUrlPart}.html", sectionNewsPageContent); // зберігаємо HTML сторінки розділу
+        File.WriteAllText($"ukrnet_{sectionUrlPart}.html", sectionNewsPageContent); // зберігаємо HTML сторінки розділу
 
         var parsedNewsItems = pageParser.GetNewsItems(sectionNewsPageContent);
 
@@ -72,14 +72,17 @@ public class SiteParser(IWebDriver driver, IDataSaver dataSaver)
 
         var newsSections = pageParser.GetSections(pageContent);
 
-        var max = 3;
+        //var max = 3;
         foreach (var section in newsSections)
         {
+            if (section.Url.Contains("javascript:void(0)")) {
+                continue;
+            }
             ParseSrection(driver, section);
             dataSaver.SaveNewsItems(section);
-            max--;
-            if (max <= 0)
-                break;
+            //max--;
+            //if (max <= 0)
+            //    break;
         }
 
                 
