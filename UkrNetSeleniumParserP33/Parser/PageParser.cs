@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UkrNetSeleniumParserP33.Models;
+using UkrNetSeleniumParserP33.Models.DTO;
 
 namespace UkrNetSeleniumParserP33.Parser;
 

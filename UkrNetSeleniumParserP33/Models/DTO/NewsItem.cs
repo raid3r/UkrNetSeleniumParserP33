@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UkrNetSeleniumParserP33.Models;
+namespace UkrNetSeleniumParserP33.Models.DTO;
 
 public class NewsItem
 {
