@@ -14,4 +14,5 @@ public class News
     public DateTime? PublishedAt { get; set; }
 
     public virtual NewsSource Source { get; set; }
+    public virtual NewsSection NewsSection { get; set; }
 }

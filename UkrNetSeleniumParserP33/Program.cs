@@ -16,7 +16,13 @@ using IWebDriver driver = new ChromeDriver();
 
 try
 {
-    var parser = new UkrNetSeleniumParserP33.Parser.SiteParser(driver, new JsonFileDataSaver());
+    //var parser = new UkrNetSeleniumParserP33.Parser.SiteParser(driver, new JsonFileDataSaver());
+    var parser = new UkrNetSeleniumParserP33.Parser.SiteParser(
+        driver,
+        new DbDataSaver(
+            new UkrNetSeleniumParserP33.Models.DAL.NewsContext()
+            )
+        );
     parser.Run();
 }
 catch (Exception ex)

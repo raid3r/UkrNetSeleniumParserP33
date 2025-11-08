@@ -10,23 +10,49 @@ namespace UkrNetSeleniumParserP33.Parser;
 
 public class DbDataSaver(NewsContext context): IDataSaver
 {
-    
-
-    public void SaveNewsItems(NewsSection section)
+    public void SaveNewsItems(UkrNetSeleniumParserP33.Models.DTO.NewsSection section)
     {
         // Знайти секцію в базі даних або додати нову
+        var dbSection = context.NewsSections.FirstOrDefault(s => s.Url == section.Url);
+        if (dbSection == null)
+        {
+            dbSection = new Models.DAL.NewsSection
+            {
+                Title = section.Title,
+                Url = section.Url
+            };
+            context.NewsSections.Add(dbSection);
+            context.SaveChanges();
+        }
 
         // Пройтися по новинах і додати їх до бази даних, якщо вони ще не існують
+        foreach (var newsItem in section.NewsItems)
+        {
+            var source = context.NewsSources.FirstOrDefault(s => s.Name == newsItem.Source);
+            if (source == null)
+            {
+                source = new Models.DAL.NewsSource
+                {
+                    Name = newsItem.Source
+                };
+                context.NewsSources.Add(source);
+                context.SaveChanges();
+            }
 
-        // Зберегти зміни в базі даних
-
-        //var json = System.Text.Json.JsonSerializer.Serialize(section.NewsItems, new System.Text.Json.JsonSerializerOptions
-        //{
-        //    WriteIndented = true,
-        //    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-        //});
-        //// URL https://www.ukr.net/news/russianaggression.html
-        //var filename = $"parsed_news_items_{section.Url.Split('/').Last().Replace(".html", "").Replace(" ", "_").ToLower()}.json";
-        //File.WriteAllText(filename, json);
+            var dbNewsItem = context.NewsItems.FirstOrDefault(n => n.Url == newsItem.Url);
+            if (dbNewsItem == null)
+            {
+                dbNewsItem = new Models.DAL.News
+                {
+                    Title = newsItem.Title,
+                    Url = newsItem.Url,
+                    Source = source,
+                    NewsSection = dbSection,
+                    PublishedAt = newsItem.PublishedAt,
+                };
+                context.NewsItems.Add(dbNewsItem);
+            }
+            context.SaveChanges();
+        }
     }
 }
